@@ -132,10 +132,20 @@ public class ReturnAction extends ActionSupport implements ServletRequestAware, 
                                     }
                                     if(ad!=null){
                                         String base64 = ad.getValue().get(0);
-                                        byte[] xml = Base64.getDecoder().decode(base64.getBytes());
+                                        byte[] xml = null;
+                                        try {
+                                            xml = Base64.getDecoder().decode(base64.getBytes());
+                                        } catch (Exception e) {
+                                            logger.warn("visiblement pas un base64 "+e);
+                                        }
                                         List<String> att = new ArrayList<String>();
-                                        String sXml = new String(xml);
-                                        att.add(sXml);
+                                        if(xml != null){
+                                            String sXml = new String(xml);
+                                            att.add(sXml);
+                                        }else{
+                                            logger.debug("on passe en clair l adresse");
+                                            att.add(base64);
+                                        }
                                         ad.setValue(att);
                                         attrList.add(ad);
                                         continue;
