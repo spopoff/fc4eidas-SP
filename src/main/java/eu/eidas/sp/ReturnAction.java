@@ -89,7 +89,7 @@ public class ReturnAction extends ActionSupport implements ServletRequestAware, 
 	 * @return	 
 	 */
 	public String populate(){			
-				
+		logger.debug("Retour dans populateReturnAction");		
 		EIDASAuthnResponse authnResponse = null;
 		IPersonalAttributeList personalAttributeList = null;
 		
@@ -125,6 +125,9 @@ public class ReturnAction extends ActionSupport implements ServletRequestAware, 
 			for(PersonalAttribute pa:personalAttributeList){
 				//should use the iterator because it provides the items in their insert order
                                 if(pa.getName().equalsIgnoreCase("currentaddress")){
+                                    if(pa.isEmptyValue() || pa.isEmptyComplexValue()){
+                                        continue;
+                                    }
                                     PersonalAttribute ad = null;
                                     try {
                                         ad = (PersonalAttribute) pa.clone();
